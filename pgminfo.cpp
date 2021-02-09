@@ -11,7 +11,7 @@
 # include <cstdio>
 # include <sstream>
 # include <vector>
-#include <bits/stdc++.h> 
+# include <bits/stdc++.h> 
 # include <fstream>
 # include <cstring>
 // libraries
@@ -20,7 +20,7 @@ using namespace std ;
 
 int main(int argc, char *argv[]) {
 	
-	string line ;			
+	string line ;
 	stringstream buff( line ) ;
 	int rows = 0 , cols = 0 ;
 	int bufferCheck ;
@@ -33,31 +33,58 @@ int main(int argc, char *argv[]) {
 	}
 	// P2 Test
 
-	cin >> rows ;
 	cin >> cols ;
+	cin >> rows ;
 	if ( rows <= 0 || cols <= 0 ) {
-		cerr << "Bad PGM file -- no column specification\n" ;
+		cerr << "Bad PGM file -- No row specification\n" ;
 		return 2 ;
 	}
 	// Negative or No Columns Test
 
-	int pixels = ( rows * cols ) ;
+	unsigned int pixels = ( rows * cols ) ;
 
 	cin >> bufferCheck ;
 	if ( bufferCheck != 255 ) {
 		cerr << "Bad PGM file -- No column specification\n" ;
 		return 3 ;
+	}	
+
+	vector<string> data ;
+
+	while ( cin >> line  ) {
+		data.push_back ( line ) ;
+	}
+	
+	float temp ;
+	float sum = 0 ;
+
+	for ( unsigned int i = 0 ; i < data.size() ; i++ ) {
+	if ( i > pixels ) {
+		cerr << "Bad PGM file -- Extra stuff after the pixels\n" ;
+		return 4 ;
+	}
 	}
 
-	
+	for ( unsigned int i = 0 ; i < data.size() ; i++ ) {
+		line = data.at(i) ;
+		buff.clear() ;
+		buff << line  ;
+		buff >> temp ;
+		if ( ( temp > 255 ) || ( temp < 0 ) ) {
+			cerr << "Bad PGM file -- pixel " << i << " is not a number between 0 and 255\n" ;
+			return 5 ;
+		}
+		sum = ( sum + temp ) ;
+	}
 
-	int sum = accumulate( intData.begin(), intData.end(), 0 ) ;
-	int average = ( sum / pixels ) ;
 
-	printf( "# Rows:         %d\n", rows ) ;
-	printf( "# Columns:      %d\n", cols ) ;
-	printf( "# Pixels:       %d\n", pixels ) ;
-	printf( "# Avg Pixel:    %d\n", average ) ;
+
+	float average = ( sum / pixels ) ;
+
+	printf( "# Rows:%12d\n", rows ) ;
+	printf( "# Columns:%9d\n", cols ) ;
+	printf( "# Pixels:%10d\n", pixels ) ;
+	printf( "Avg Pixel:%9.3f\n", average ) ;
 
 	return 0 ;
 }
