@@ -1,4 +1,4 @@
-// Lab 2:  pgminfo
+// Lab 2:  pgminfo.cpp
 // This lab reads in a pgm file and identifies the number of rows and columns
 //		If the pgm file is bad, it will also identify that, and how.
 // COSC 140
@@ -24,6 +24,10 @@ int main(int argc, char *argv[]) {
 	stringstream buff( line ) ;
 	int rows = 0 , cols = 0 ;
 	int bufferCheck ;
+	vector<string> data ;
+	float temp ;
+	float sum = 0 ;
+	// variables
 
 	getline( cin, line ) ;
 	
@@ -31,39 +35,38 @@ int main(int argc, char *argv[]) {
 		cerr << "Bad PGM file -- first word is not P2\n" ;
 		return 1 ; 
 	}
-	// P2 Test
+	// Grabs the first line and checks if it's P2
 
 	cin >> cols ;
 	cin >> rows ;
 	if ( rows <= 0 || cols <= 0 ) {
 		cerr << "Bad PGM file -- No row specification\n" ;
-		return 2 ;
+		return 1 ;
 	}
-	// Negative or No Columns Test
+	// Grabs the second line and checks if there are  valid columns and rows
 
 	unsigned int pixels = ( rows * cols ) ;
+	// Announced this one later because it's contingent on two others
 
 	cin >> bufferCheck ;
 	if ( bufferCheck != 255 ) {
 		cerr << "Bad PGM file -- No column specification\n" ;
-		return 3 ;
+		return 1 ;
 	}	
-
-	vector<string> data ;
+	// Grabs the next word to check if it's the 255 buffer
 
 	while ( cin >> line  ) {
 		data.push_back ( line ) ;
 	}
+	// Grabs the rest of the data
 	
-	float temp ;
-	float sum = 0 ;
-
 	for ( unsigned int i = 0 ; i < data.size() ; i++ ) {
-	if ( i > pixels ) {
-		cerr << "Bad PGM file -- Extra stuff after the pixels\n" ;
-		return 4 ;
+		if ( i > pixels ) {
+			cerr << "Bad PGM file -- Extra stuff after the pixels\n" ;
+			return 1 ;
+		}
 	}
-	}
+	// If there is too much data, throws out an error message
 
 	for ( unsigned int i = 0 ; i < data.size() ; i++ ) {
 		line = data.at(i) ;
@@ -76,15 +79,16 @@ int main(int argc, char *argv[]) {
 		}
 		sum = ( sum + temp ) ;
 	}
-
-
+	// Converts the getline data into quantifiable integers
 
 	float average = ( sum / pixels ) ;
+	// Announced later because it's contingent on two other variables
 
 	printf( "# Rows:%12d\n", rows ) ;
 	printf( "# Columns:%9d\n", cols ) ;
 	printf( "# Pixels:%10d\n", pixels ) ;
 	printf( "Avg Pixel:%9.3f\n", average ) ;
+	// Prints the calculated data
 
 	return 0 ;
 }
